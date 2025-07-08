@@ -9,7 +9,18 @@ find_package(OpenGL REQUIRED)
 find_package(GLEW REQUIRED)
 find_package(glfw3 REQUIRED)
 
-add_executable(LearnOpenGL src/main.cpp)
+add_executable(LearnOpenGL src/main.cpp
+        src/Renderer.cpp
+        src/Renderer.h
+        src/VertexBuffer.cpp
+        src/VertexBuffer.h
+        src/IndexBuffer.cpp
+        src/IndexBuffer.h
+        src/VertexArray.cpp
+        src/VertexArray.h
+        src/VertexBufferLayout.cpp
+        src/VertexBufferLayout.h
+)
 target_include_directories(LearnOpenGL PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
 target_compile_definitions(LearnOpenGL PRIVATE GLEW_STATIC)
