@@ -20,6 +20,8 @@ add_executable(LearnOpenGL src/main.cpp
         src/VertexArray.h
         src/VertexBufferLayout.cpp
         src/VertexBufferLayout.h
+        src/Shader.cpp
+        src/Shader.h
 )
 target_include_directories(LearnOpenGL PRIVATE ${CMAKE_SOURCE_DIR}/src)
 
