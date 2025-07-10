@@ -27,7 +27,7 @@ add_executable(LearnOpenGL src/main.cpp
         src/Texture.cpp
         src/Texture.h
 )
-target_include_directories(LearnOpenGL PRIVATE ${CMAKE_SOURCE_DIR}/src)
+target_include_directories(LearnOpenGL PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/vendor)
 
 target_compile_definitions(LearnOpenGL PRIVATE GLEW_STATIC)
 

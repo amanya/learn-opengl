@@ -1,10 +1,12 @@
 #include <filesystem>
 #include <iostream>
-#include <fstream>
 #include <sstream>
 #include <string>
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #include "Renderer.h"
 #include "IndexBuffer.h"
@@ -13,6 +15,7 @@
 #include "VertexArray.h"
 #include "VertexBuffer.h"
 #include "VertexBufferLayout.h"
+
 
 int main(void)
 {
@@ -68,10 +71,13 @@ int main(void)
 
     IndexBuffer ib(indices, 6);
 
+    glm::mat4 proj = glm::ortho(-2.0f, 2.0f, -1.5f, 1.5f, -1.0f, 1.0f);
+
     Shader shader("res/shaders/Basic.shader");
     shader.Bind();
 
     shader.SetUniform4f("u_Color", 0.8f, 0.4f, 0.6f, 1.0f);
+    shader.SetUniformMat4f("u_MVP", proj);
 
     va.Unbind();
     shader.Unbind();
