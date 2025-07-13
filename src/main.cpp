@@ -18,6 +18,7 @@
 #include "imgui/imgui.h"
 #include "backends/imgui_impl_glfw.h"
 #include "backends/imgui_impl_opengl3.h"
+#include "tests/TestClearColor.h"
 
 
 int main(void)
@@ -49,43 +50,8 @@ int main(void)
 
     std::cout << glGetString(GL_VERSION) << std::endl;
 
-    float positions[] = {
-        100.0f, 100.0f, 0.0f, 0.0f,
-        200.0f, 100.0f, 1.0f, 0.0f,
-        200.0f, 200.0f, 1.0f, 1.0f,
-        100.0f, 200.0f, 0.0f, 1.0f,
-    };
-
-    unsigned int indices[] = {
-        0, 1, 2,
-        2, 3, 0
-    };
-
     GLCall(glEnable(GL_BLEND));
     GLCall(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
-
-    VertexArray va;
-    VertexBuffer vb(positions, 4 * 4 * sizeof(float));
-
-    VertexBufferLayout layout;
-    layout.Push<float>(2);
-    layout.Push<float>(2);
-    va.AddBuffer(vb, layout);
-
-    IndexBuffer ib(indices, 6);
-
-    glm::mat4 proj = glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f);
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(-100.0f, 0.0f, 0.0f));
-
-    Shader shader("res/shaders/Basic.shader");
-    shader.Bind();
-
-    shader.SetUniform4f("u_Color", 0.8f, 0.4f, 0.6f, 1.0f);
-
-    va.Unbind();
-    shader.Unbind();
-    vb.Unbind();
-    ib.Unbind();
 
     Renderer renderer;
 
@@ -101,58 +67,25 @@ int main(void)
 
     ImGui::StyleColorsDark();
 
-    glm::vec3 translation(200.0f, 200.0f, 0.0f);
+    test::TestClearColor test;
 
-    float r = 0.0f;
-    float increment = 0.05f;
-
-    bool show_demo_window = true;
-    bool show_another_window = false;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-
-    Texture texture("res/textures/spongebob.png");
-    texture.Bind();
-
-    /* Loop until the user closes the window */
     while (!glfwWindowShouldClose(window))
     {
         renderer.Clear();
 
+        test.OnUpdate(0.0f);
+        test.OnRender();
+
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
-
-        shader.Bind();
-        shader.SetUniform4f("u_Color", r, 0.4f, 0.6f, 1.0f);
-
-        glm::mat4 model = glm::translate(glm::mat4(1.0f), translation);
-        glm::mat4 mvp = proj * view * model;
-
-        shader.SetUniform1i("u_Texture", 0);
-        shader.SetUniformMat4f("u_MVP", mvp);
-
-        renderer.Draw(va, ib, shader);
-
-        if (r > 1.0f)
-            increment = -0.05f;
-        else if (r < -0.0f)
-            increment = 0.05f;
-
-        r += increment;
-
-        {
-            ImGui::SliderFloat3("Translation", &translation.x, 0.0f, 960.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-
-            ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-        }
+        test.OnImGuiRender();
 
         ImGui::Render();
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-        /* Swap front and back buffers */
         glfwSwapBuffers(window);
 
-        /* Poll for and process events */
         glfwPollEvents();
     }
 

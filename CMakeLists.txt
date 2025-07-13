@@ -33,6 +33,9 @@ add_executable(LearnOpenGL src/main.cpp
         src/Texture.cpp
         src/Texture.h
         ${IMGUI_SRC}
+        src/tests/Test.h
+        src/tests/TestClearColor.cpp
+        src/tests/TestClearColor.h
 )
 target_include_directories(LearnOpenGL PRIVATE ${CMAKE_SOURCE_DIR}/src ${CMAKE_SOURCE_DIR}/src/vendor ${CMAKE_SOURCE_DIR}/src/vendor/imgui)
 
